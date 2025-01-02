@@ -226,7 +226,7 @@ namespace Bl.FeatureFlag.Domain.Primitive
         /// <summary>
         /// Add error to result if condition is true
         /// </summary>
-        public void AddIf<TProperty>(bool condition, Expression<Func<TResult, TProperty>> fieldError, CoreExceptionCode code)
+        public void AddIf<TProperty>(Expression<Func<TResult, TProperty>> fieldError, bool condition, CoreExceptionCode code)
         {
             if (condition)
                 _errors.Add(FieldCoreException.Create(fieldError, code));
@@ -236,8 +236,8 @@ namespace Bl.FeatureFlag.Domain.Primitive
         /// Add error to result if enumerable is empty
         /// </summary>
         public bool AddIfIsEmpty<TProperty>(
-            System.Collections.IEnumerable toCheck,
             Expression<Func<TResult, TProperty>> fieldError,
+            System.Collections.IEnumerable toCheck,
             CoreExceptionCode code = Result.DEFAULT_STATUS_ERROR)
         {
             foreach (var _ in toCheck)
@@ -253,8 +253,8 @@ namespace Bl.FeatureFlag.Domain.Primitive
         /// Add error to result if string is null or white space
         /// </summary>
         public bool AddIfIsNullOrWhiteSpace<TProperty>(
-            string? toCheck,
             Expression<Func<TResult, TProperty>> fieldError,
+            string? toCheck,
             CoreExceptionCode code = Result.DEFAULT_STATUS_ERROR)
         {
             var result = string.IsNullOrWhiteSpace(toCheck);
@@ -270,8 +270,8 @@ namespace Bl.FeatureFlag.Domain.Primitive
         /// Add error to result if string is null or empty
         /// </summary>
         public bool AddIfIsNullOrEmpty<TProperty>(
+            Expression<Func<TResult, TProperty>> fieldError,
             string? toCheck,
-            Expression<Func<TResult, TProperty>> fieldError, 
             CoreExceptionCode code = Result.DEFAULT_STATUS_ERROR)
         {
             var result = string.IsNullOrEmpty(toCheck);
@@ -286,8 +286,8 @@ namespace Bl.FeatureFlag.Domain.Primitive
         /// Add error to result if object is null
         /// </summary>
         public bool AddIfIsNull<TProperty>(
+            Expression<Func<TResult, TProperty>> fieldError,
             object? toCheck,
-            Expression<Func<TResult, TProperty>> fieldError, 
             CoreExceptionCode code = Result.DEFAULT_STATUS_ERROR)
         {
             var result = toCheck is null;
