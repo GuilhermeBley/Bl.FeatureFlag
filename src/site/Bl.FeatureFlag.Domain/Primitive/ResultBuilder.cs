@@ -191,7 +191,7 @@ namespace Bl.FeatureFlag.Domain.Primitive
             catch
             {
                 return Result.Failed(
-                    new[] { new CommonCoreException("Failed to get result.") });
+                    new[] { new Result.Error("Failed to get result.", CoreExceptionCode.BadRequest) });
             }
 
             return Result.Success();
@@ -230,6 +230,72 @@ namespace Bl.FeatureFlag.Domain.Primitive
         {
             if (condition)
                 _errors.Add(FieldCoreException.Create(fieldError, code));
+        }
+
+        /// <summary>
+        /// Add error to result if enumerable is empty
+        /// </summary>
+        public bool AddIfIsEmpty<TProperty>(
+            System.Collections.IEnumerable toCheck,
+            Expression<Func<TResult, TProperty>> fieldError,
+            CoreExceptionCode code = Result.DEFAULT_STATUS_ERROR)
+        {
+            foreach (var _ in toCheck)
+            {
+                return true;
+            }
+
+            _errors.Add(FieldCoreException.Create(fieldError, code));
+            return false;
+        }
+
+        /// <summary>
+        /// Add error to result if string is null or white space
+        /// </summary>
+        public bool AddIfIsNullOrWhiteSpace<TProperty>(
+            string? toCheck,
+            Expression<Func<TResult, TProperty>> fieldError,
+            CoreExceptionCode code = Result.DEFAULT_STATUS_ERROR)
+        {
+            var result = string.IsNullOrWhiteSpace(toCheck);
+
+            if (result)
+                _errors.Add(FieldCoreException.Create(fieldError, code));
+
+            return result;
+
+        }
+
+        /// <summary>
+        /// Add error to result if string is null or empty
+        /// </summary>
+        public bool AddIfIsNullOrEmpty<TProperty>(
+            string? toCheck,
+            Expression<Func<TResult, TProperty>> fieldError, 
+            CoreExceptionCode code = Result.DEFAULT_STATUS_ERROR)
+        {
+            var result = string.IsNullOrEmpty(toCheck);
+
+            if (result)
+                _errors.Add(FieldCoreException.Create(fieldError, code));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Add error to result if object is null
+        /// </summary>
+        public bool AddIfIsNull<TProperty>(
+            object? toCheck,
+            Expression<Func<TResult, TProperty>> fieldError, 
+            CoreExceptionCode code = Result.DEFAULT_STATUS_ERROR)
+        {
+            var result = toCheck is null;
+
+            if (result)
+                _errors.Add(FieldCoreException.Create(fieldError, code));
+
+            return result;
         }
 
         /// <summary>
@@ -285,7 +351,7 @@ namespace Bl.FeatureFlag.Domain.Primitive
             }
             catch
             {
-                return Result<TResult>.Failed(new CommonCoreException("Failed to get result."));
+                return Result<TResult>.Failed(new Result.Error("Failed to get result.", CoreExceptionCode.BadRequest));
             }
 
             return Result<TResult>.Success(validResult);
