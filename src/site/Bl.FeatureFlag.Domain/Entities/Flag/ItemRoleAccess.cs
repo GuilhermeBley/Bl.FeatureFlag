@@ -1,21 +1,21 @@
 ﻿using Bl.FeatureFlag.Domain.Extensions;
 using Bl.FeatureFlag.Domain.Primitive;
 
-namespace Bl.FeatureFlag.Domain.Entities;
+namespace Bl.FeatureFlag.Domain.Entities.Flag;
 
 /// <summary>
-/// Represents an access item that can be checked if has or not the access.
+/// Represents an item that can be checked if has or not the access.
 /// </summary>
 public class ItemRoleAccess
     : Entity
 {
-    public string RoleName { get; private set; } = string.Empty;
-    public string NormalizedRoleName { get; private set; } = string.Empty;
-    public bool Active { get; private set; }
-    public DateTime? ExpiresAt { get; private set; }
-    public DateTime CreatedAt { get; private set; }
+    public string RoleName { get; internal set; } = string.Empty;
+    public string NormalizedRoleName { get; internal set; } = string.Empty;
+    public bool Active { get; internal set; }
+    public DateTime? ExpiresAt { get; internal set; }
+    public DateTime CreatedAt { get; internal set; }
 
-    private ItemRoleAccess() { }
+    internal ItemRoleAccess() { }
 
     public override bool Equals(object? obj)
     {
@@ -52,7 +52,7 @@ public class ItemRoleAccess
 
         builder.AddIf(
             e => e.RoleName,
-            roleName.Length < 3 || roleName.Length > 255, 
+            roleName.Length < 3 || roleName.Length > 255,
             CoreExceptionCode.InvalidStringLength);
 
         return builder.CreateResult(() =>
