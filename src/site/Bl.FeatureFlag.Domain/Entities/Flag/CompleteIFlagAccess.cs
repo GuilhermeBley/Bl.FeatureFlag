@@ -3,17 +3,17 @@ using Bl.FeatureFlag.Domain.Primitive;
 
 namespace Bl.FeatureFlag.Domain.Entities.Flag;
 
-public class CompleteItemRoleAccess
-    : ItemRoleAccess
+public class CompleteIFlagAccess
+    : FlagAccess
 {
     public string? Description { get; private set; }
     public string? Obs { get; private set; }
 
-    private CompleteItemRoleAccess() { }
+    private CompleteIFlagAccess() { }
 
     public override bool Equals(object? obj)
     {
-        return obj is CompleteItemRoleAccess access &&
+        return obj is CompleteIFlagAccess access &&
                base.Equals(obj) &&
                EntityId.Equals(access.EntityId) &&
                RoleName == access.RoleName &&
@@ -40,7 +40,7 @@ public class CompleteItemRoleAccess
         return hash.ToHashCode();
     }
 
-    public static Result<CompleteItemRoleAccess> Create(
+    public static Result<CompleteIFlagAccess> Create(
         string roleName,
         string description,
         string obs,
@@ -48,7 +48,7 @@ public class CompleteItemRoleAccess
         DateTime? expiresAt,
         DateTime createdAt)
     {
-        ResultBuilder<CompleteItemRoleAccess> builder = new();
+        ResultBuilder<CompleteIFlagAccess> builder = new();
 
         roleName = roleName ?? string.Empty;
         description = description?.Trim() ?? string.Empty;
@@ -70,7 +70,7 @@ public class CompleteItemRoleAccess
             CoreExceptionCode.InvalidStringLength);
 
         return builder.CreateResult(() =>
-            new CompleteItemRoleAccess
+            new CompleteIFlagAccess
             {
                 Active = active,
                 CreatedAt = createdAt,

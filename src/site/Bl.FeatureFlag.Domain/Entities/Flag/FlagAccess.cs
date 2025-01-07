@@ -6,7 +6,7 @@ namespace Bl.FeatureFlag.Domain.Entities.Flag;
 /// <summary>
 /// Represents an item that can be checked if has or not the access.
 /// </summary>
-public class ItemRoleAccess
+public class FlagAccess
     : Entity
 {
     public string RoleName { get; internal set; } = string.Empty;
@@ -15,11 +15,11 @@ public class ItemRoleAccess
     public DateTime? ExpiresAt { get; internal set; }
     public DateTime CreatedAt { get; internal set; }
 
-    internal ItemRoleAccess() { }
+    internal FlagAccess() { }
 
     public override bool Equals(object? obj)
     {
-        return obj is ItemRoleAccess access &&
+        return obj is FlagAccess access &&
                EntityId.Equals(access.EntityId) &&
                RoleName == access.RoleName &&
                NormalizedRoleName == access.NormalizedRoleName &&
@@ -40,13 +40,13 @@ public class ItemRoleAccess
         return Active && provider.UtcNow > ExpiresAt;
     }
 
-    public static Result<ItemRoleAccess> Create(
+    public static Result<FlagAccess> Create(
         string roleName,
         bool active,
         DateTime? expiresAt,
         DateTime createdAt)
     {
-        ResultBuilder<ItemRoleAccess> builder = new();
+        ResultBuilder<FlagAccess> builder = new();
 
         roleName = roleName ?? string.Empty;
 
@@ -56,12 +56,12 @@ public class ItemRoleAccess
             CoreExceptionCode.InvalidStringLength);
 
         return builder.CreateResult(() =>
-            new ItemRoleAccess
+            new FlagAccess
             {
                 Active = active,
                 CreatedAt = createdAt,
                 ExpiresAt = expiresAt,
-                NormalizedRoleName = roleName.RemoveAccents(),
+                NormalizedRoleName = roleName.RemoveAccents().Replace(" ", string.Empty),
                 RoleName = roleName,
             }
         );
