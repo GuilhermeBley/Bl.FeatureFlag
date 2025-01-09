@@ -11,9 +11,9 @@ public class FlagGroup
     public string Name { get; private set; } = string.Empty;
     public string NormalizedRoleName { get; internal set; } = string.Empty;
     public string? Description { get; private set; }
-    public Guid SubscriptionId { get; private set; }
     public DateTime CreatedAt { get; private set; }
 
+    public UserSubscription UserSubscription { get; private set; } = null!;
     public IReadOnlyList<FlagAccess> Flags { get; private set; } = [];
 
     private FlagGroup() { }
@@ -25,7 +25,7 @@ public class FlagGroup
                Id.Equals(group.Id) &&
                Name == group.Name &&
                Description == group.Description &&
-               SubscriptionId.Equals(group.SubscriptionId) &&
+               UserSubscription.Equals(group.UserSubscription) &&
                CreatedAt == group.CreatedAt &&
                EqualityComparer<IReadOnlyList<FlagAccess>>.Default.Equals(Flags, group.Flags);
     }
@@ -37,6 +37,7 @@ public class FlagGroup
 
     public static Result<FlagGroup> Create(
         Guid id,
+        Guid userId,
         string name,
         string? description,
         FlagAccess[] flags,
@@ -64,8 +65,7 @@ public class FlagGroup
                 Name = name,
                 Description = description,
                 Flags = flags.ToList(),
-                Id = subscriptionId,
-                SubscriptionId = subscriptionId,
+                UserSubscription = UserSubscription.Create(subscriptionId, userId, createdAt),
                 CreatedAt = createdAt,
                 NormalizedRoleName = name.RemoveAccents().Replace(" ", string.Empty),
             }
