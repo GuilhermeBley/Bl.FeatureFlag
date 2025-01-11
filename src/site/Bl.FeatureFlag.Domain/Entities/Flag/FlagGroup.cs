@@ -32,7 +32,7 @@ public class FlagGroup
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(EntityId, Id, Name, Description, SubscriptionId, CreatedAt, Flags);
+        return HashCode.Combine(EntityId, Id, Name, Description, UserSubscription, CreatedAt, Flags);
     }
 
     public static Result<FlagGroup> Create(

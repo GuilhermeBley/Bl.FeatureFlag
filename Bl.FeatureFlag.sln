@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "site", "site", "{38058955-6
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bl.FeatureFlag.Domain", "src\site\Bl.FeatureFlag.Domain\Bl.FeatureFlag.Domain.csproj", "{E1462ED7-1B91-4C2C-97A0-D2F4D0B6F185}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bl.FeatureFlag.Application", "src\site\Bl.FeatureFlag.Application\Bl.FeatureFlag.Application.csproj", "{1C772116-29A4-4BCC-808D-EAB41E243AEE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,9 +24,14 @@ Global
 		{E1462ED7-1B91-4C2C-97A0-D2F4D0B6F185}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1462ED7-1B91-4C2C-97A0-D2F4D0B6F185}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1462ED7-1B91-4C2C-97A0-D2F4D0B6F185}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C772116-29A4-4BCC-808D-EAB41E243AEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C772116-29A4-4BCC-808D-EAB41E243AEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C772116-29A4-4BCC-808D-EAB41E243AEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C772116-29A4-4BCC-808D-EAB41E243AEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{38058955-643C-438D-A250-AB6C9AF87525} = {17191485-9212-4C85-BB8F-51C0C94B86D8}
 		{E1462ED7-1B91-4C2C-97A0-D2F4D0B6F185} = {38058955-643C-438D-A250-AB6C9AF87525}
+		{1C772116-29A4-4BCC-808D-EAB41E243AEE} = {38058955-643C-438D-A250-AB6C9AF87525}
 	EndGlobalSection
 EndGlobal
