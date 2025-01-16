@@ -4,6 +4,7 @@ namespace Bl.FeatureFlag.Application.Model;
 
 public class FlagAccessModel
 {
+    public Guid GroupId { get; set; }
     public string RoleName { get; set; } = string.Empty;
     public string NormalizedRoleName { get; set; } = string.Empty;
     public bool Active { get; set; }
