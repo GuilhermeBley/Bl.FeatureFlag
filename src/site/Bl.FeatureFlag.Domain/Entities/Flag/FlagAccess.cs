@@ -10,6 +10,7 @@ public class FlagAccess
     : Entity
 {
     public Guid Id { get; private set; }
+    public IGroupInfo Group { get; internal set; } = null!;
     public string RoleName { get; internal set; } = string.Empty;
     public string NormalizedRoleName { get; internal set; } = string.Empty;
     public bool Active { get; internal set; }
@@ -23,6 +24,7 @@ public class FlagAccess
         return obj is FlagAccess access &&
                EntityId.Equals(access.EntityId) &&
                Id.Equals(access.Id) &&
+               Group == access.Group &&
                RoleName == access.RoleName &&
                NormalizedRoleName == access.NormalizedRoleName &&
                Active == access.Active &&
@@ -32,7 +34,7 @@ public class FlagAccess
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(EntityId, Id, RoleName, NormalizedRoleName, Active, ExpiresAt, CreatedAt);
+        return HashCode.Combine(EntityId, Id, RoleName, Group, NormalizedRoleName, Active, ExpiresAt, CreatedAt);
     }
 
     public bool CanAccess(IDateTimeProvider? provider = null)

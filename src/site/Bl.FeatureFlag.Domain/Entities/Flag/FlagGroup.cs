@@ -5,7 +5,8 @@ using Bl.FeatureFlag.Domain.Primitive;
 namespace Bl.FeatureFlag.Domain.Entities.Flag;
 
 public class FlagGroup
-    : Entity
+    : Entity,
+    IGroupInfo
 {
     public Guid Id { get; private set; }
     public string Name { get; private set; } = string.Empty;
@@ -64,15 +65,23 @@ public class FlagGroup
             CoreExceptionCode.BadRequest);
 
         return builder.CreateResult(() =>
-            new FlagGroup
             {
-                Id = id,
-                Name = name,
-                Description = description,
-                Flags = flags.ToList(),
-                UserSubscription = UserSubscription.Create(subscriptionId, userId, createdAt),
-                CreatedAt = createdAt,
-                NormalizedName = name.RemoveAccents().Replace(" ", string.Empty),
+                var flagList = flags.ToList();
+
+                var group = new FlagGroup
+                {
+                    Id = id,
+                    Name = name,
+                    Description = description,
+                    Flags = flagList,
+                    UserSubscription = UserSubscription.Create(subscriptionId, userId, createdAt),
+                    CreatedAt = createdAt,
+                    NormalizedName = name.RemoveAccents().Replace(" ", string.Empty),
+                };
+
+                flagList.ForEach(e => e.Group = group);
+
+                return group;
             }
         );
     }

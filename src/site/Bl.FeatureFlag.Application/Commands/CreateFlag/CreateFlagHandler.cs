@@ -10,6 +10,17 @@ public class CreateFlagHandler
 {
     private readonly FlagContext _context;
     private readonly IClaimProvider _claimProvider;
+    private readonly IFastFlagRepository _fastFlagRepository;
+
+    public CreateFlagHandler(
+        FlagContext context, 
+        IClaimProvider claimProvider, 
+        IFastFlagRepository fastFlagRepository)
+    {
+        _context = context;
+        _claimProvider = claimProvider;
+        _fastFlagRepository = fastFlagRepository;
+    }
 
     public async Task<CreateFlagResponse> Handle(
         CreateFlagRequest request, 
@@ -94,16 +105,21 @@ public class CreateFlagHandler
                 await _context
                     .Flags
                     .AddAsync(CompleteFlagAccessModel.MapFromEntity(flag, group.Id), cancellationToken);
+
+                // Add flag to another data source, like azure data tables
+                await _fastFlagRepository.AddAsync(flag, cancellationToken);
             }
 
-            // Add flag to another data source, like azure data tables
+            await _context.SaveChangesAsync();
 
-            _context.Flags.
+            await transaction.CommitAsync();
         }
         catch
         {
             await transaction.RollbackAsync();
             throw;
         }
+
+        return new(group.Id);
     }
 }
