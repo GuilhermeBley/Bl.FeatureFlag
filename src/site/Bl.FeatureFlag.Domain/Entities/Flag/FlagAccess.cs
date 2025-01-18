@@ -9,6 +9,7 @@ namespace Bl.FeatureFlag.Domain.Entities.Flag;
 public class FlagAccess
     : Entity
 {
+    public Guid Id { get; private set; }
     public string RoleName { get; internal set; } = string.Empty;
     public string NormalizedRoleName { get; internal set; } = string.Empty;
     public bool Active { get; internal set; }
@@ -21,6 +22,7 @@ public class FlagAccess
     {
         return obj is FlagAccess access &&
                EntityId.Equals(access.EntityId) &&
+               Id.Equals(access.Id) &&
                RoleName == access.RoleName &&
                NormalizedRoleName == access.NormalizedRoleName &&
                Active == access.Active &&
@@ -30,7 +32,7 @@ public class FlagAccess
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(EntityId, RoleName, NormalizedRoleName, Active, ExpiresAt, CreatedAt);
+        return HashCode.Combine(EntityId, Id, RoleName, NormalizedRoleName, Active, ExpiresAt, CreatedAt);
     }
 
     public bool CanAccess(IDateTimeProvider? provider = null)
@@ -41,6 +43,19 @@ public class FlagAccess
     }
 
     public static Result<FlagAccess> Create(
+        string roleName,
+        bool active,
+        DateTime? expiresAt,
+        DateTime createdAt)
+        => Create(
+            id: Guid.Empty,
+            roleName: roleName,
+            active: active,
+            expiresAt: expiresAt,
+            createdAt: createdAt);
+
+    public static Result<FlagAccess> Create(
+        Guid id,
         string roleName,
         bool active,
         DateTime? expiresAt,
@@ -58,6 +73,7 @@ public class FlagAccess
         return builder.CreateResult(() =>
             new FlagAccess
             {
+                Id = id,
                 Active = active,
                 CreatedAt = createdAt,
                 ExpiresAt = expiresAt,

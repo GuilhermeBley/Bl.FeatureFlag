@@ -1,4 +1,5 @@
 ﻿using Bl.FeatureFlag.Domain.Entities.Flag;
+using System.Text.RegularExpressions;
 
 namespace Bl.FeatureFlag.Application.Model;
 
@@ -9,10 +10,13 @@ public class CompleteFlagAccessModel
     public string? Obs { get; set; }
 
     public static CompleteFlagAccessModel MapFromEntity(
-        CompleteFlagAccess entity)
+        CompleteFlagAccess entity,
+        Guid groupId)
     {
         return new()
         {
+            Id = entity.Id,
+            GroupId = groupId,
             RoleName = entity.RoleName,
             NormalizedRoleName = entity.NormalizedRoleName,
             Active = entity.Active,

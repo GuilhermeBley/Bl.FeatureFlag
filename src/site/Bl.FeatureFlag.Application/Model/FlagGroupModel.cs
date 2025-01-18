@@ -6,7 +6,7 @@ public class FlagGroupModel
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
-    public string NormalizedRoleName { get; set; } = string.Empty;
+    public string NormalizedName { get; set; } = string.Empty;
     public string? Description { get; set; }
     public DateTime CreatedAt { get; set; }
     public UserSubscriptionModel UserSubscription { get; set; } = null!;
@@ -18,7 +18,7 @@ public class FlagGroupModel
         {
             Id = entity.Id,
             Name = entity.Name,
-            NormalizedRoleName = entity.NormalizedRoleName,
+            NormalizedName = entity.NormalizedName,
             Description = entity.Description,
             CreatedAt = entity.CreatedAt,
             UserSubscription = UserSubscriptionModel.MapFromEntity(entity.UserSubscription),

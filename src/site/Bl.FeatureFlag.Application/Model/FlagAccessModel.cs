@@ -4,6 +4,7 @@ namespace Bl.FeatureFlag.Application.Model;
 
 public class FlagAccessModel
 {
+    public Guid Id { get; set; }
     public Guid GroupId { get; set; }
     public string RoleName { get; set; } = string.Empty;
     public string NormalizedRoleName { get; set; } = string.Empty;
@@ -12,10 +13,13 @@ public class FlagAccessModel
     public DateTime CreatedAt { get; set; }
 
     public static FlagAccessModel MapFromEntity(
-        FlagAccess entity)
+        FlagAccess entity,
+        Guid groupId)
     {
         return new()
         {
+            Id = entity.Id,
+            GroupId = groupId,
             Active = entity.Active,
             ExpiresAt = entity.ExpiresAt,
             CreatedAt = entity.CreatedAt,

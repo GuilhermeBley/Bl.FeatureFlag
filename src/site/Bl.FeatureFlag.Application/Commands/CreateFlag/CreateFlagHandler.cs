@@ -1,4 +1,5 @@
-﻿using Bl.FeatureFlag.Application.Repository;
+﻿using Bl.FeatureFlag.Application.Model;
+using Bl.FeatureFlag.Application.Repository;
 using Bl.FeatureFlag.Domain.Entities.Flag;
 using System.Xml.Linq;
 
@@ -54,21 +55,50 @@ public class CreateFlagHandler
         await using var transaction
             = await _context.Database.BeginTransactionAsync(cancellationToken);
 
+        var groupAdded = await _context
+            .FlagGroups
+            .Where(e => e.NormalizedName == group.NormalizedName)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (groupAdded is not null &&
+            request.GroupDescription is not null)
+            groupAdded.Description = group.Description;
+
+        if (groupAdded is null)
+        {
+            groupAdded = (await _context
+                .FlagGroups
+                .AddAsync(FlagGroupModel.MapFromEntity(group), cancellationToken))
+                .Entity;
+        }
+
+        await _context.SaveChangesAsync(cancellationToken);
+
         try
         {
-            foreach (var flag in group.Flags)
+            group.UpdateId(groupAdded.Id);
+
+            foreach (var flag in group.Flags.Cast<CompleteFlagAccess>())
             {
                 var flagAlreadyRegistered = await (
-    
-                    )
-                    .AnyAsync(e => e.NormalizedRoleName == flag.NormalizedRoleName, cancellationToken);
+                    from f in _context.Flags
+                    join g in _context.FlagGroups
+                        on f.GroupId equals g.Id
+                    where f.NormalizedRoleName == flag.NormalizedRoleName
+                    where g.NormalizedName == @group.NormalizedName
+                    select new { f.Id })
+                    .AnyAsync(cancellationToken);
 
-                if (flagAlreadyRegistered) throw new CoreException(CoreExceptionCode.Conflict);
+                if (flagAlreadyRegistered) continue;
+
+                await _context
+                    .Flags
+                    .AddAsync(CompleteFlagAccessModel.MapFromEntity(flag, group.Id), cancellationToken);
             }
 
             // Add flag to another data source, like azure data tables
 
-            _context.fla
+            _context.Flags.
         }
         catch
         {

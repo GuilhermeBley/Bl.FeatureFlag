@@ -9,7 +9,7 @@ public class FlagGroup
 {
     public Guid Id { get; private set; }
     public string Name { get; private set; } = string.Empty;
-    public string NormalizedRoleName { get; internal set; } = string.Empty;
+    public string NormalizedName { get; internal set; } = string.Empty;
     public string? Description { get; private set; }
     public DateTime CreatedAt { get; private set; }
 
@@ -33,6 +33,11 @@ public class FlagGroup
     public override int GetHashCode()
     {
         return HashCode.Combine(EntityId, Id, Name, Description, UserSubscription, CreatedAt, Flags);
+    }
+
+    public void UpdateId(Guid id)
+    {
+        Id = id;
     }
 
     public static Result<FlagGroup> Create(
@@ -67,7 +72,7 @@ public class FlagGroup
                 Flags = flags.ToList(),
                 UserSubscription = UserSubscription.Create(subscriptionId, userId, createdAt),
                 CreatedAt = createdAt,
-                NormalizedRoleName = name.RemoveAccents().Replace(" ", string.Empty),
+                NormalizedName = name.RemoveAccents().Replace(" ", string.Empty),
             }
         );
     }
