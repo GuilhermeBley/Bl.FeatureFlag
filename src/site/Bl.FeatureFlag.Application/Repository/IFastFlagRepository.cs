@@ -1,4 +1,5 @@
-﻿using Bl.FeatureFlag.Domain.Entities.Flag;
+﻿using Bl.FeatureFlag.Application.Model;
+using Bl.FeatureFlag.Domain.Entities.Flag;
 
 namespace Bl.FeatureFlag.Application.Repository;
 
@@ -8,4 +9,5 @@ namespace Bl.FeatureFlag.Application.Repository;
 public interface IFastFlagRepository
 {
     Task AddAsync(FlagAccess flag, CancellationToken cancellationToken = default);
+    Task<FlagAccessModel> GetByNameAsync(string groupName, string roleName, CancellationToken cancellationToken = default);
 }
