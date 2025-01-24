@@ -8,6 +8,30 @@ public static class ClaimPrincipalExtensions
     /// Get the user ID, if null, it throws an exception.
     /// </summary>
     /// <exception cref="UnauthorizedAccessException"></exception>
+    public static Guid RequiredSubscriptionId(this ClaimsPrincipal principal)
+        => GetSubscriptionId(principal)
+        ?? throw new CoreException(CoreExceptionCode.Forbbiden);
+
+    /// <summary>
+    /// Get the subscription ID or null.
+    /// </summary>
+    public static Guid? GetSubscriptionId(this ClaimsPrincipal principal)
+    {
+        var claim = principal
+            .Claims
+            .FirstOrDefault(claim => claim.Type == Domain.Security.UserClaim.DEFAULT_SUBSCRIPTION_ID);
+
+        if (claim is null ||
+            !Guid.TryParse(claim.Value, out var id))
+            return null;
+
+        return id;
+    }
+
+    /// <summary>
+    /// Get the user ID, if null, it throws an exception.
+    /// </summary>
+    /// <exception cref="UnauthorizedAccessException"></exception>
     public static Guid RequiredUserId(this ClaimsPrincipal principal)
         => GetUserId(principal)
         ?? throw new UnauthorizedAccessException();
@@ -88,12 +112,25 @@ public static class ClaimPrincipalExtensions
     /// </summary>
     /// <exception cref="UnauthorizedCoreException"></exception>
     /// <exception cref="ForbbidenCoreException"></exception>
+    public static void ThrowIfIsNotInSubscription(this ClaimsPrincipal principal, Guid subscriptionId)
+    {
+        ThrowIfIsntLogged(principal);
+
+        if (!principal.Requireds)
+            throw new CoreException(CoreExceptionCode.Forbbiden);
+    }
+
+    /// <summary>
+    /// This method checks if the user is logged and if it contains the role.
+    /// </summary>
+    /// <exception cref="UnauthorizedCoreException"></exception>
+    /// <exception cref="ForbbidenCoreException"></exception>
     public static void ThrowIfDoesntContainRole(this ClaimsPrincipal principal, Claim roleClaim)
     {
         ThrowIfIsntLogged(principal);
 
         if (!principal.IsInRole(roleClaim.Value))
-            throw new CoreException(CoreExceptionCode.Forbbiden)
+            throw new CoreException(CoreExceptionCode.Forbbiden);
     }
 
     /// <summary>

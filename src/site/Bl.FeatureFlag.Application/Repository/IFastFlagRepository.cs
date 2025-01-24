@@ -9,5 +9,9 @@ namespace Bl.FeatureFlag.Application.Repository;
 public interface IFastFlagRepository
 {
     Task AddAsync(FlagAccess flag, CancellationToken cancellationToken = default);
-    Task<FlagAccessModel> GetByNameAsync(string groupName, string roleName, CancellationToken cancellationToken = default);
+    Task<FlagAccessModel> GetByNameAsync(
+        Guid subscriptionId,
+        string groupName, 
+        string roleName, 
+        CancellationToken cancellationToken = default);
 }

@@ -8,6 +8,7 @@ public static class UserClaim
     public const string DEFAULT_USER_NAME = "name";
     public const string DEFAULT_USER_ID = "id";
     public const string DEFAULT_USER_EMAIL = "email";
+    public const string DEFAULT_SUBSCRIPTION_ID = "subs";
 
     public static Claim SeeFlags => new(DEFAULT_ROLE, "SeeFlags");
     public static Claim ManageFlags => new(DEFAULT_ROLE, "ManageFlags");
