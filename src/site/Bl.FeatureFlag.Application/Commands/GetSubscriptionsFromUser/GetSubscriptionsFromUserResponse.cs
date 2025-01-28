@@ -1,7 +1,11 @@
 ﻿namespace Bl.FeatureFlag.Application.Commands.GetSubscriptionsFromUser;
 
-public record GetSubscriptionsFromUserItem();
+public record GetSubscriptionsFromUserItem(
+    Guid Id,
+    string Name,
+    string NormalizedName,
+    DateTime CreatedAt);
 
 public record GetSubscriptionsFromUserResponse(
     Guid UserId,
-    IReadOnlyList<GetSubscriptionsFromUserItem> Items);
+    GetSubscriptionsFromUserItem[] Items);

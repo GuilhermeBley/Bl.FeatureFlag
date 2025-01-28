@@ -10,4 +10,5 @@ public abstract class FlagContext
     public DbSet<CompleteFlagAccessModel> Flags { get; set; }
     public DbSet<FlagGroupModel> FlagGroups { get; set; }
     public DbSet<UserSubscriptionModel> UserSubscriptions { get; set; }
+    public DbSet<SubscriptionModel> Subscriptions { get; set; }
 }

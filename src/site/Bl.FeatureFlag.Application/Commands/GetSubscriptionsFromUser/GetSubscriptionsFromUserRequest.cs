@@ -2,6 +2,6 @@
 
 public record GetSubscriptionsFromUserRequest(
     Guid UserId,
-    long Skip,
-    long Take)
+    int Skip,
+    int Take)
     : IRequest<GetSubscriptionsFromUserResponse>;
