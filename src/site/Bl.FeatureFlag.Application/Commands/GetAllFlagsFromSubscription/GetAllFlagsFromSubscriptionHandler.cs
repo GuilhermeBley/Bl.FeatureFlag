@@ -9,6 +9,12 @@ public class GetAllFlagsFromSubscriptionHandler
     private readonly FlagContext _context;
     private readonly IClaimProvider _claimProvider;
 
+    public GetAllFlagsFromSubscriptionHandler(FlagContext context, IClaimProvider claimProvider)
+    {
+        _context = context;
+        _claimProvider = claimProvider;
+    }
+
     public async Task<GetAllFlagsFromSubscriptionResponse> Handle(
         GetAllFlagsFromSubscriptionRequest request,
         CancellationToken cancellationToken)
