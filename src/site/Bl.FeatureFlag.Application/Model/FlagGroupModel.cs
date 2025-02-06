@@ -10,6 +10,7 @@ public class FlagGroupModel
     public string? Description { get; set; }
     public DateTime CreatedAt { get; set; }
     public UserSubscriptionModel UserSubscription { get; set; } = null!;
+    public Guid SubscriptionId { get; set; }
     public List<FlagAccessModel> Flags { get; set; } = new();
 
     public static FlagGroupModel MapFromEntity(FlagGroup entity)
@@ -21,6 +22,7 @@ public class FlagGroupModel
             NormalizedName = entity.NormalizedName,
             Description = entity.Description,
             CreatedAt = entity.CreatedAt,
+            SubscriptionId = entity.Id,
             UserSubscription = UserSubscriptionModel.MapFromEntity(entity.UserSubscription),
             Flags = entity.Flags.Select(e => FlagAccessModel.MapFromEntity(e)).ToList(),
         };
