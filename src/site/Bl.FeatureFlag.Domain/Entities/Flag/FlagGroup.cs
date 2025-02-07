@@ -14,7 +14,7 @@ public class FlagGroup
     public string? Description { get; private set; }
     public DateTime CreatedAt { get; private set; }
 
-    public UserSubscription UserSubscription { get; private set; } = null!;
+    public UserSubscription UserSub { get; private set; } = null!;
     public IReadOnlyList<FlagAccess> Flags { get; private set; } = [];
 
     private FlagGroup() { }
@@ -26,14 +26,14 @@ public class FlagGroup
                Id.Equals(group.Id) &&
                Name == group.Name &&
                Description == group.Description &&
-               UserSubscription.Equals(group.UserSubscription) &&
+               UserSub.Equals(group.UserSub) &&
                CreatedAt == group.CreatedAt &&
                EqualityComparer<IReadOnlyList<FlagAccess>>.Default.Equals(Flags, group.Flags);
     }
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(EntityId, Id, Name, Description, UserSubscription, CreatedAt, Flags);
+        return HashCode.Combine(EntityId, Id, Name, Description, UserSub, CreatedAt, Flags);
     }
 
     public void UpdateId(Guid id)
@@ -74,7 +74,7 @@ public class FlagGroup
                     Name = name,
                     Description = description,
                     Flags = flagList,
-                    UserSubscription = UserSubscription.Create(subscriptionId, userId, createdAt),
+                    UserSub = UserSubscription.Create(Guid.Empty, subscriptionId, userId, createdAt),
                     CreatedAt = createdAt,
                     NormalizedName = name.RemoveAccents().Replace(" ", string.Empty),
                 };

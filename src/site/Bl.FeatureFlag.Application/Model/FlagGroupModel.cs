@@ -23,7 +23,7 @@ public class FlagGroupModel
             Description = entity.Description,
             CreatedAt = entity.CreatedAt,
             SubscriptionId = entity.Id,
-            UserSubscription = UserSubscriptionModel.MapFromEntity(entity.UserSubscription),
+            UserSubscription = UserSubscriptionModel.MapFromEntity(entity.UserSub),
             Flags = entity.Flags.Select(e => FlagAccessModel.MapFromEntity(e)).ToList(),
         };
     }
