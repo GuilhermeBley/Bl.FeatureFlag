@@ -38,7 +38,7 @@ public class Result
     public void EnsureSuccess()
     {
         if (Errors.Any())
-            throw new AggregateCoreException(Errors);
+            throw new Exceptions.AggregateCoreException(Errors);
     }
 
     public static Result<TResult> Success<TResult>(TResult result)
@@ -73,7 +73,7 @@ public class Result<TResult> : Result
     /// </summary>
     public TResult RequiredResult =>
         _result
-        ?? throw new AggregateCoreException("Empty result.", Errors);
+        ?? throw new Exceptions.AggregateCoreException(Errors);
 
     protected internal Result(TResult? result, bool isSuccess, IEnumerable<ICoreException> errors) : base(isSuccess, errors)
     {
