@@ -61,11 +61,11 @@ internal class PostgreFlagContext
         builder.Entity<FlagGroupModel>(b =>
         {
             b.Property(e => e.Id).ValueGeneratedOnAdd();
-            b.Property(e => e.Name).HasMaxLength(500);
-            b.Property(e => e.NormalizedName).HasMaxLength(500);
+            b.Property(e => e.Name).HasMaxLength(500).IsRequired();
+            b.Property(e => e.NormalizedName).HasMaxLength(500).IsRequired();
             b.Property(e => e.Description);
-            b.Property(e => e.CreatedAt);
-            b.Property(e => e.SubscriptionId);
+            b.Property(e => e.CreatedAt).IsRequired();
+            b.Property(e => e.SubscriptionId).IsRequired();
 
             b.HasOne(e => e.UserSubscription)
                 .WithMany()
@@ -76,12 +76,23 @@ internal class PostgreFlagContext
 
         builder.Entity<UserSubscriptionModel>(b =>
         {
+            b.Property(e => e.SubscriptionId).IsRequired();
+            b.Property(e => e.UserId).IsRequired();
+            b.Property(e => e.CreatedAt).IsRequired();
 
+            b.HasOne(e => e.Subscription)
+                .WithMany()
+                .IsRequired()
+                .HasForeignKey(e => e.SubscriptionId)
+                .OnDelete(DeleteBehavior.NoAction);
         });
 
         builder.Entity<SubscriptionModel>(b =>
         {
-
+            b.Property(e => e.Id).IsRequired();
+            b.Property(e => e.Name).IsRequired().HasMaxLength(255);
+            b.Property(e => e.NormalizedName).IsRequired().HasMaxLength(255);
+            b.Property(e => e.CreatedAt).IsRequired();
         });
     }
 }
