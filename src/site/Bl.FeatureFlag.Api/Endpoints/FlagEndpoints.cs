@@ -1,4 +1,5 @@
-﻿using Bl.FeatureFlag.Application.Providers;
+﻿using Bl.FeatureFlag.Api.Security;
+using Bl.FeatureFlag.Application.Providers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -62,7 +63,7 @@ public static class FlagEndpoints
 
                 return Results.Ok(result);
             })
-            .RequireAuthorization(b => b.AddAuthenticationSchemes(DefaultAuthenticationSchemas.ClientFlag));
+            .RequireAuthorization(b => b.RequireRole(ClientRoleCheckSchema.RequiredRole));
 
         endpointBuilder.MapGet(
             "api/subscription",

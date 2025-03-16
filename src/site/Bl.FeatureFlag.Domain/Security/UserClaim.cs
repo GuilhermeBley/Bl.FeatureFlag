@@ -11,6 +11,7 @@ public static class UserClaim
     public const string DEFAULT_SUBSCRIPTION_ID = "subs";
 
     public static Claim SeeFlags => new(DEFAULT_ROLE, "SeeFlags");
+    public static Claim SeeFlagsClientSide => new(DEFAULT_ROLE, "SeeClientFlags");
     public static Claim ManageFlags => new(DEFAULT_ROLE, "ManageFlags");
 
     public static Claim CreateUserNameClaim(string userName)
