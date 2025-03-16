@@ -22,5 +22,27 @@ public static class FlagEndpoints
 
                 return Results.Ok();
             });
+
+        endpointBuilder.MapPost(
+            "api/flag/subscription/{subscriptionId}",
+            async (
+                Guid subscriptionId,
+                [FromBody] Application.Commands.CreateFlag.CreateFlagRequest request,
+                HttpContext context,
+                [FromServices] IMediator mediator,
+                CancellationToken cancellationToken) =>
+            {
+                if (request.SubscriptionId != subscriptionId)
+                    return Results.BadRequest(new
+                    {
+                        Error = "Invalid Subscription. Should be the same of the request."
+                    });
+
+                var response = await mediator.Send(request, cancellationToken);
+
+                return Results.Created(
+                    $"api/flag/subscription/{request.SubscriptionId}", 
+                    new { FlagId = response.CreatedFlagId });
+            });
     }
 }
