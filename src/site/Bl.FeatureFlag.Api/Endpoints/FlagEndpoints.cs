@@ -63,7 +63,8 @@ public static class FlagEndpoints
 
                 return Results.Ok(result);
             })
-            .RequireAuthorization(b => b.RequireRole(ClientRoleCheckSchema.RequiredRole));
+            .RequireAuthorization(b => b.AddAuthenticationSchemes(ClientRoleCheckSchema.Schema)
+                .RequireRole(ClientRoleCheckSchema.RequiredRole));
 
         endpointBuilder.MapGet(
             "api/subscription",
