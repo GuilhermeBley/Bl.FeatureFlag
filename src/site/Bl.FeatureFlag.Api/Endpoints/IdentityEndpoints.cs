@@ -39,7 +39,9 @@ internal static class IdentityEndpoints
                     return Results.BadRequest("Invalid email or password.");
                 }
 
-                var token = jwtTokenService.GenerateTokenAsync(claims, TimeSpan.FromMinutes(30),cancellationToken);
+                var claims = await userManager.GetClaimsAsync(user);
+
+                var token = jwtTokenService.GenerateTokenAsync(claims.ToArray(), TimeSpan.FromMinutes(30),cancellationToken);
 
                 return Results.Ok(new { Token = token });
             });
