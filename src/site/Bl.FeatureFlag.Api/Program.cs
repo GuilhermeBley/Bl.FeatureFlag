@@ -19,5 +19,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 FlagEndpoints.MapEndpoints(app);
+IdentityEndpoints.MapEndpoints(app);
 
 app.Run();
