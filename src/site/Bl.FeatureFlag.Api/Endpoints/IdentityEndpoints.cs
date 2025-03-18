@@ -1,4 +1,5 @@
 ﻿using Bl.FeatureFlag.Api.Model;
+using Bl.FeatureFlag.Api.Services;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ internal static class IdentityEndpoints
                 [FromBody] LoginRequestViewModel request,
                 UserManager<IdentityUser> userManager,
                 SignInManager<IdentityUser> signInManager,
+                IJwtTokenService jwtTokenService,
                 CancellationToken cancellationToken) =>
             {
                 if (string.IsNullOrEmpty(request.Login) || string.IsNullOrEmpty(request.Password))
@@ -37,7 +39,7 @@ internal static class IdentityEndpoints
                     return Results.BadRequest("Invalid email or password.");
                 }
 
-                var token = GenerateJwtToken(user, configuration);
+                var token = jwtTokenService.GenerateTokenAsync(claims, TimeSpan.FromMinutes(30),cancellationToken);
 
                 return Results.Ok(new { Token = token });
             });
