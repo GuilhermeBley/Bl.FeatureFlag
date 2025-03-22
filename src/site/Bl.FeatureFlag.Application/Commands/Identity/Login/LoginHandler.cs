@@ -1,4 +1,5 @@
 ﻿
+using Bl.FeatureFlag.Application.Model.Identity;
 using Bl.FeatureFlag.Domain.Primitive;
 using Microsoft.AspNetCore.Identity;
 
@@ -7,9 +8,9 @@ namespace Bl.FeatureFlag.Application.Commands.Identity.Login;
 public class LoginHandler
     : IRequestHandler<LoginRequest, LoginResponse>
 {
-    public readonly UserManager<IdentityUser<Guid>> _userManager;
+    public readonly UserManager<UserModel> _userManager;
 
-    public LoginHandler(UserManager<IdentityUser<Guid>> userManager)
+    public LoginHandler(UserManager<UserModel> userManager)
     {
         _userManager = userManager;
     }

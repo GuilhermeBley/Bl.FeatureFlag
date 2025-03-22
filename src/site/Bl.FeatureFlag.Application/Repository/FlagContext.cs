@@ -1,11 +1,12 @@
 ﻿using Bl.FeatureFlag.Application.Model;
+using Bl.FeatureFlag.Application.Model.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Bl.FeatureFlag.Application.Repository;
 
 public abstract class FlagContext
-    : IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>, Guid>
+    : IdentityDbContext<UserModel, IdentityRole<Guid>, Guid>
 {
     public DbSet<CompleteFlagAccessModel> Flags { get; set; }
     public DbSet<FlagGroupModel> FlagGroups { get; set; }
