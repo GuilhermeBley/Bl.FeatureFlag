@@ -47,7 +47,7 @@ public class CreateFlagHandler
                 roleName: e.Name,
                 description: e.Description ?? string.Empty,
                 obs: string.Empty,
-                active: true,
+                active: e.Active,
                 expiresAt: e.ExpiresAt,
                 createdAt: DateTime.UtcNow)
                 .RequiredResult)

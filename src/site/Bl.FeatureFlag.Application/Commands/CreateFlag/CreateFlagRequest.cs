@@ -3,6 +3,7 @@
 public record CreateFlagItem(
     string Name,
     string? Description,
+    bool Active,
     DateTime? ExpiresAt);
 
 public record CreateFlagRequest(
