@@ -27,11 +27,20 @@ public class LoginHandler
         {
             throw new CoreException(CoreExceptionCode.Unauthorized, "Invalid login or password.");
         }
-        
+
         var result = await _userManager.CheckPasswordAsync(user, request.Password);
         if (!result)
         {
+            await _userManager.AccessFailedAsync(user);
             throw new CoreException(CoreExceptionCode.Unauthorized, "Invalid login or password.");
+        }
+
+        if (user.AccessFailedCount > 0)
+            await _userManager.ResetAccessFailedCountAsync(user);
+        
+        if (user.EmailConfirmed == false)
+        {
+            throw new CoreException(CoreExceptionCode.BadRequest, "Email is not confirmed.");
         }
 
         var claims = await _userManager.GetClaimsAsync(user);
