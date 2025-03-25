@@ -48,38 +48,13 @@ internal static class IdentityEndpoints
 
         endpointBuilder.MapPost(
             "api/user",
-            async ([FromBody] CreateUserRequestViewModel request,
-                UserManager<IdentityUser> userManager,
+            async ([FromBody] Application.Commands.Identity.CreateUser.CreateUserRequest request,
+                [FromServices] IMediator mediator,
                 CancellationToken cancellationToken) =>
             {
-                if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
-                {
-                    return Results.BadRequest("Email and password are required.");
-                }
+                var response = await mediator.Send(request, cancellationToken);
 
-                var existingUser = await userManager.FindByEmailAsync(request.Email);
-                if (existingUser != null)
-                {
-                    return Results.BadRequest("User with this email already exists.");
-                }
-
-                var user = new IdentityUser
-                {
-                    UserName = request.Email,
-                    Email = request.Email
-                };
-
-                var createUserResult = await userManager.CreateAsync(user, request.Password);
-
-                if (!createUserResult.Succeeded)
-                {
-                    return Results.BadRequest(createUserResult.Errors);
-                }
-
-                // TODO: Add claim
-                // await userManager.AddClaimAsync(user, new Claim("custom-claim", "value"));
-
-                return Results.Ok(new { Message = "User created successfully.", UserId = user.Id });
+                return Results.Created($"api/user/{response.UserId}", new{ response.UserId });
             });
     }
 }
