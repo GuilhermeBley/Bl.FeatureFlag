@@ -87,18 +87,15 @@ public static class FlagEndpoints
         endpointBuilder.MapPost(
             "api/subscription",
             async (
+                [FromBody] Application.Commands.CreateSubscription.CreateSubscriptionRequest request,
                 [FromServices] IMediator mediator,
                 HttpContext context,
                 int skip = 0,
                 int take = 1000) =>
             {
-                var response = await mediator.Send(
-                    new Application.Commands.CreateSubscription.CreateSubscriptionRequest(
-                        UserId: context.User.RequiredSubscriptionId(),
-                        Skip: skip,
-                        Take: take));
+                var response = await mediator.Send(request);
 
-                return Results.Ok(response.Items);
+                return Results.Created($"api/subscription/{response.SubscriptionId}", new { response.SubscriptionId });
             })
             .RequireAuthorization();
     }
