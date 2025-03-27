@@ -83,5 +83,23 @@ public static class FlagEndpoints
                 return Results.Ok(response.Items);
             })
             .RequireAuthorization();
+
+        endpointBuilder.MapPost(
+            "api/subscription",
+            async (
+                [FromServices] IMediator mediator,
+                HttpContext context,
+                int skip = 0,
+                int take = 1000) =>
+            {
+                var response = await mediator.Send(
+                    new Application.Commands.CreateSubscription.CreateSubscriptionRequest(
+                        UserId: context.User.RequiredSubscriptionId(),
+                        Skip: skip,
+                        Take: take));
+
+                return Results.Ok(response.Items);
+            })
+            .RequireAuthorization();
     }
 }
