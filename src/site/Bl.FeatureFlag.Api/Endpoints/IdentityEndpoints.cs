@@ -40,5 +40,16 @@ internal static class IdentityEndpoints
 
                 return Results.Created($"api/user/{response.UserId}", new{ response.UserId });
             });
+
+        endpointBuilder.MapPost(
+            "api/user/request/user-email-confirmation",
+            async ([FromBody] Application.Commands.Identity.SendUserEmailConfirmationTokenToUser.SendUserEmailConfirmationTokenToUserRequest request,
+                [FromServices] IMediator mediator,
+                CancellationToken cancellationToken) =>
+            {
+                var response = await mediator.Send(request, cancellationToken);
+
+                return Results.Ok();
+            });
     }
 }
