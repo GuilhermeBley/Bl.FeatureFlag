@@ -1,4 +1,5 @@
 using Bl.FeatureFlag.Api.Endpoints;
+using Bl.FeatureFlag.Api.Middlewares;
 using Bl.FeatureFlag.Api.Services;
 using Bl.FeatureFlag.Infrastructure.Di;
 
@@ -22,6 +23,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 FlagEndpoints.MapEndpoints(app);
 IdentityEndpoints.MapEndpoints(app);

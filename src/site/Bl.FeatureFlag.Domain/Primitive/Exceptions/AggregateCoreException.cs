@@ -6,6 +6,7 @@ public class AggregateCoreException
     : CoreException
 {
     private readonly IReadOnlyList<ICoreException> _exceptions;
+    public IReadOnlyList<ICoreException> InnerExceptions => _exceptions;
 
     public AggregateCoreException(IEnumerable<ICoreException> coreExceptions)
         : this(coreExceptions.ToArray()) { }
