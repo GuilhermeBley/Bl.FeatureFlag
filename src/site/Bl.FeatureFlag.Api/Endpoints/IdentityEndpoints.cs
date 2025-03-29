@@ -1,10 +1,6 @@
-﻿using Bl.FeatureFlag.Api.Model;
-using Bl.FeatureFlag.Api.Services;
-using MediatR;
+﻿using Bl.FeatureFlag.Api.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using System.Threading;
 
 namespace Bl.FeatureFlag.Api.Endpoints;
 
@@ -44,6 +40,17 @@ internal static class IdentityEndpoints
         endpointBuilder.MapPost(
             "api/user/request/user-email-confirmation",
             async ([FromBody] Application.Commands.Identity.SendUserEmailConfirmationTokenToUser.SendUserEmailConfirmationTokenToUserRequest request,
+                [FromServices] IMediator mediator,
+                CancellationToken cancellationToken) =>
+            {
+                var response = await mediator.Send(request, cancellationToken);
+
+                return Results.Ok();
+            });
+
+        endpointBuilder.MapPost(
+            "api/user/confirm/user-email-confirmation",
+            async ([FromBody] Application.Commands.Identity.ConfirmEmailByUserToken.ConfirmEmailByUserTokenRequest request,
                 [FromServices] IMediator mediator,
                 CancellationToken cancellationToken) =>
             {
