@@ -1,5 +1,7 @@
 ﻿using Bl.FeatureFlag.Api.Config;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
@@ -19,6 +21,8 @@ public interface IJwtTokenService
 public class JwtTokenService
     : IJwtTokenService
 {
+    private readonly static TimeSpan _defaultExpiration = TimeSpan.FromMinutes(15);
+
     private readonly IOptions<JwtConfig> _config;
     private readonly ILogger<JwtTokenService> _logger;
 
@@ -40,12 +44,11 @@ public class JwtTokenService
             var key = _config.Value.Key;
             var issuer = _config.Value.Issuer;
             var audience = _config.Value.Audience;
-            var defaultExpiration = _config.Value.DefaultExpirationInMinutes;
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var expiration = expiresIn ?? TimeSpan.FromMinutes(defaultExpiration);
+            var expiration = expiresIn ?? _defaultExpiration;
             var tokenExpiration = DateTime.UtcNow.Add(expiration);
 
             var token = new JwtSecurityToken(
@@ -59,11 +62,7 @@ public class JwtTokenService
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenString = tokenHandler.WriteToken(token);
 
-            var result = new TokenResult
-            {
-                Token = tokenString,
-                ExpiresAt = tokenExpiration
-            };
+            var result = new TokenResult(tokenString);
 
             return Task.FromResult(result);
         }
